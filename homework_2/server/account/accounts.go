@@ -20,6 +20,11 @@ type Handler struct {
 	guard    *sync.RWMutex
 }
 
+// Actuator проверка живо ли оно
+func (h *Handler) Actuator(c echo.Context) error {
+	return c.String(http.StatusOK, "OK")
+}
+
 // CreateAccount создает новый аккаунт
 // POST /account/create
 // {"name": "alice", "amount": 50}

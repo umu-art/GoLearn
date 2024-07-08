@@ -29,13 +29,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata for go_homework_2
+      - name: Extract metadata for go-homework-2
         id: meta
         uses: docker/metadata-action@v5.5.1
         with:
-          images: ${{ env.REGISTRY }}/${{ github.actor }}/go_homework_2
+          images: ${{ env.REGISTRY }}/${{ github.actor }}/go-homework-2
 
-      - name: Build and push Docker image for go_homework_2
+      - name: Build and push Docker image for go-homework-2
         uses: docker/build-push-action@v5.3.0
         with:
           context: .
@@ -56,5 +56,5 @@ jobs:
           kubeconfig: ${{ secrets.KUBESECRET }}
           context: kubernetes-admin@kubernetes
 
-      - name: Deploy go_homework_2
-        run: kubectl rollout restart deployment/go_homework_2 -n go
+      - name: Deploy go-homework-2
+        run: kubectl rollout restart deployment/go-homework-2 -n go

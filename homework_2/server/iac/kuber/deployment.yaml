@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: go_homework_2
+  name: go-homework-2
   namespace: go
   labels:
-    app: go_homework_2
+    app: go-homework-2
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: go_homework_2
+      app: go-homework-2
   template:
     metadata:
-      name: go_homework_2
+      name: go-homework-2
       labels:
-        app: go_homework_2
+        app: go-homework-2
     spec:
       containers:
-        - name: go_homework_2
-          image: ghcr.io/umu-art/go_homework_2:master
+        - name: go-homework-2
+          image: ghcr.io/umu-art/go-homework-2:master
           imagePullPolicy: Always
 
           readinessProbe:
