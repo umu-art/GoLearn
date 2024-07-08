@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: go-homework-2
+  name: go-homework-2-core
   namespace: argocd
   labels:
     type: app
@@ -11,7 +11,7 @@ spec:
     server: https://kubernetes.default.svc
   project: go
   source:
-    path: homework_2/server/iac/kuber
+    path: homework_2/iac/kubernetes/go-homework-2-core
     repoURL: git@github.com:umu-art/GoLearn.git
     targetRevision: master
   syncPolicy:

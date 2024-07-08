@@ -8,119 +8,159 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 )
 
-type Command struct {
-	Port   int
-	Host   string
-	Cmd    string
-	Name   string
-	Amount int
+type ConnectionInfo struct {
+	Port int
+	Host string
 }
 
-func (c *Command) Do() error {
-	switch c.Cmd {
-	case "create":
-		return c.create()
-	default:
-		return fmt.Errorf("unknown command: %s", c.Cmd)
-	}
+type CommandInfo struct {
+	ConnectionInfo ConnectionInfo
+	Command        string
+	Execute        func(ConnectionInfo) error
 }
 
-func (c *Command) create() error {
-	panic("implement me")
+var commands = []CommandInfo{
+	{
+		Command: "Создать новый аккаунт",
+		Execute: func(info ConnectionInfo) error {
+			var request dto.CreateAccountRequest
+
+			fmt.Print("Введите имя нового аккаунта: ")
+			_, _ = fmt.Scan(&request.Name)
+
+			fmt.Print("Введите баланс: ")
+			_, _ = fmt.Scan(&request.Amount)
+
+			data, err := json.Marshal(request)
+			if err != nil {
+				return fmt.Errorf("json marshal failed: %w", err)
+			}
+
+			_, err = ExecuteHttp(info, "account/create", "POST", data)
+			if err != nil {
+				return err
+			}
+
+			println("Аккаунт создан")
+			return nil
+		},
+	},
+	{
+		Command: "Получить информацию об аккаунте",
+		Execute: func(info ConnectionInfo) error {
+			var name string
+
+			fmt.Print("Введите имя аккаунта: ")
+			_, _ = fmt.Scan(&name)
+
+			resp, err := ExecuteHttp(info, fmt.Sprintf("account?name=%s", name), "GET", nil)
+			if err != nil {
+				return err
+			}
+
+			var response dto.GetAccountResponse
+			if err := json.Unmarshal(resp, &response); err != nil {
+				return fmt.Errorf("json unmarshal failed: %w", err)
+			}
+
+			fmt.Printf("Имя: %s, Баланс: %d\n", response.Name, response.Amount)
+
+			return nil
+		},
+	},
+	{
+		Command: "Изменить баланс",
+		Execute: func(info ConnectionInfo) error {
+			var request dto.PatchAccountRequest
+
+			fmt.Print("Введите имя аккаунта: ")
+			_, _ = fmt.Scan(&request.Name)
+
+			fmt.Print("Введите новую сумму: ")
+			_, _ = fmt.Scan(&request.Amount)
+
+			data, err := json.Marshal(request)
+			if err != nil {
+				return fmt.Errorf("json marshal failed: %w", err)
+			}
+
+			_, err = ExecuteHttp(info, "account", "PATCH", data)
+			if err != nil {
+				return err
+			}
+
+			println("Баланс изменен")
+			return nil
+		},
+	},
+	{
+		Command: "Удалить аккаунт",
+		Execute: func(info ConnectionInfo) error {
+			var request dto.DeleteAccountRequest
+
+			fmt.Print("Введите имя аккаунта: ")
+			_, _ = fmt.Scan(&request.Name)
+
+			data, err := json.Marshal(request)
+			if err != nil {
+				return fmt.Errorf("json marshal failed: %w", err)
+			}
+
+			_, err = ExecuteHttp(info, "account", "DELETE", data)
+			if err != nil {
+				return err
+			}
+
+			println("Аккаунт удален")
+			return nil
+		},
+	},
+	{
+		Command: "Переименовать аккаунт",
+		Execute: func(info ConnectionInfo) error {
+			var request dto.ChangeAccountRequest
+
+			fmt.Print("Введите имя аккаунта: ")
+			_, _ = fmt.Scan(&request.Name)
+
+			fmt.Print("Введите новое имя: ")
+			_, _ = fmt.Scan(&request.NewName)
+
+			data, err := json.Marshal(request)
+			if err != nil {
+				return fmt.Errorf("json marshal failed: %w", err)
+			}
+
+			_, err = ExecuteHttp(info, "account", "PATCH", data)
+			if err != nil {
+				return err
+			}
+
+			println("Аккаунт переименован")
+			return nil
+		},
+	},
 }
 
-func main() {
-	portVal := flag.Int("port", 8080, "server port")
-	hostVal := flag.String("host", "127.0.0.1", "server host")
-	cmdVal := flag.String("cmd", "create", "command to execute")
-	nameVal := flag.String("name", "alice", "name of account")
-	amountVal := flag.Int("amount", 0, "amount of account")
+func ExecuteHttp(info ConnectionInfo, path string, method string, data []byte) ([]byte, error) {
+	req, err := http.NewRequest(
+		method,
+		fmt.Sprintf("%s:%d/%s", info.Host, info.Port, path),
+		bytes.NewReader(data))
 
-	flag.Parse()
-
-	cmd := Command{
-		Port:   *portVal,
-		Host:   *hostVal,
-		Cmd:    *cmdVal,
-		Name:   *nameVal,
-		Amount: *amountVal,
-	}
-
-	if err := do(cmd); err != nil {
-		panic(err)
-	}
-}
-
-func do(cmd Command) error {
-	switch cmd.Cmd {
-	case "create":
-		if err := create(cmd); err != nil {
-			return fmt.Errorf("create account failed: %w", err)
-		}
-
-		return nil
-	case "get":
-		if err := get(cmd); err != nil {
-			return fmt.Errorf("get account failed: %w", err)
-		}
-
-		return nil
-	default:
-		return fmt.Errorf("unknown command %s", cmd.Cmd)
-	}
-}
-
-func get(cmd Command) error {
-	resp, err := http.Get(
-		fmt.Sprintf("http://%s:%d/account?name=%s", cmd.Host, cmd.Port, cmd.Name),
-	)
 	if err != nil {
-		return fmt.Errorf("http post failed: %w", err)
+		return nil, fmt.Errorf("http request create failed: %w", err)
 	}
 
-	defer func() {
-		_ = resp.Body.Close()
-	}()
+	req.Header.Set("Content-Type", "application/json")
 
-	if resp.StatusCode != http.StatusOK {
-		body, err := io.ReadAll(resp.Body)
-		if err != nil {
-			return fmt.Errorf("read body failed: %w", err)
-		}
+	resp, err := http.DefaultClient.Do(req)
 
-		return fmt.Errorf("resp error %s", string(body))
-	}
-
-	var response dto.GetAccountResponse
-	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
-		return fmt.Errorf("json decode failed: %w", err)
-	}
-
-	fmt.Printf("response account name: %s and amount: %d", response.Name, response.Amount)
-
-	return nil
-}
-
-func create(cmd Command) error {
-	request := dto.CreateAccountRequest{
-		Name:   cmd.Name,
-		Amount: cmd.Amount,
-	}
-
-	data, err := json.Marshal(request)
 	if err != nil {
-		return fmt.Errorf("json marshal failed: %w", err)
-	}
-
-	resp, err := http.Post(
-		fmt.Sprintf("http://%s:%d/account/create", cmd.Host, cmd.Port),
-		"application/json",
-		bytes.NewReader(data),
-	)
-	if err != nil {
-		return fmt.Errorf("http post failed: %w", err)
+		return nil, fmt.Errorf("http request failed: %w", err)
 	}
 
 	defer func() {
@@ -128,13 +168,75 @@ func create(cmd Command) error {
 	}()
 
 	if resp.StatusCode == http.StatusCreated {
-		return nil
+		return nil, nil
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return fmt.Errorf("read body failed: %w", err)
+		return nil, fmt.Errorf("read body failed: %w", err)
 	}
 
-	return fmt.Errorf("resp error %s", string(body))
+	return body, nil
+}
+
+func main() {
+	hostVal := flag.String("host", "http://cherry.umu-art.ru", "server host")
+	portVal := flag.Int("port", 80, "server port")
+	secretKey := flag.String("secret-key", "", "Ключ админа")
+
+	flag.Parse()
+
+	connectionInfo := ConnectionInfo{
+		Host: *hostVal,
+		Port: *portVal,
+	}
+
+	if len(*secretKey) > 0 {
+		println("Попытка получить список всех аккаунтов...")
+		resp, err := ExecuteHttp(connectionInfo, fmt.Sprintf("accounts?secret-key=%s", *secretKey), "GET", nil)
+		if err != nil {
+			println(err.Error())
+		} else {
+			var response []dto.GetAccountResponse
+			if err := json.Unmarshal(resp, &response); err != nil {
+				println(err.Error())
+			} else {
+				fmt.Printf("Всего аккаунтов: %d\n", len(response))
+				for _, account := range response {
+					fmt.Printf("Имя: %s, Баланс: %d\n", account.Name, account.Amount)
+				}
+			}
+		}
+		os.Exit(0)
+	}
+
+	for {
+		play(connectionInfo)
+	}
+}
+
+func play(connectionInfo ConnectionInfo) {
+	println()
+
+	for i, command := range commands {
+		println(i+1, ">", command.Command)
+	}
+	println("0 > Выход")
+	print("Выберите команду: ")
+
+	var commandIndex int
+	_, _ = fmt.Scan(&commandIndex)
+	if commandIndex < 0 || commandIndex > len(commands) {
+		println("Неверный индекс")
+		return
+	}
+
+	if commandIndex == 0 {
+		os.Exit(0)
+	}
+
+	err := commands[commandIndex-1].Execute(connectionInfo)
+	if err != nil {
+		println(err.Error())
+	}
 }

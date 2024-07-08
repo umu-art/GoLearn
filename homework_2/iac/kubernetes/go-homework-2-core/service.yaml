@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: go-homework-2
+  name: go-homework-2-core
   namespace: go
 spec:
   selector:
-    app: go-homework-2
+    app: go-homework-2-core
   ports:
     - protocol: TCP
       port: 80

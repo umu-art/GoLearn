@@ -18,6 +18,10 @@ jobs:
       packages: write
       attestations: write
 
+    strategy:
+      matrix:
+        app: [ go-homework-2-core, go-homework-2-nginx ]
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -29,17 +33,17 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata for go-homework-2
+      - name: Extract metadata for {{ matrix.app }}
         id: meta
         uses: docker/metadata-action@v5.5.1
         with:
-          images: ${{ env.REGISTRY }}/${{ github.actor }}/go-homework-2
+          images: ${{ env.REGISTRY }}/${{ github.actor }}/{{ matrix.app }}
 
-      - name: Build and push Docker image for go-homework-2
+      - name: Build and push Docker image for {{ matrix.app }}
         uses: docker/build-push-action@v5.3.0
         with:
           context: .
-          file: ./homework_2/server/iac/Dockerfile
+          file: ./homework_2/iac/image/{{ matrix.app }}/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -47,6 +51,10 @@ jobs:
   kube-update:
     needs: [ build-image ]
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        app: [ go-homework-2-core, go-homework-2-nginx ]
 
     steps:
       - name: Set the Kubernetes context
@@ -57,4 +65,4 @@ jobs:
           context: kubernetes-admin@kubernetes
 
       - name: Deploy go-homework-2
-        run: kubectl rollout restart deployment/go-homework-2 -n go
+        run: kubectl rollout restart deployment/{{ matrix.app }} -n go

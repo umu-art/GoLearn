@@ -1,32 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: go-homework-2
+  name: go-homework-2-core
   namespace: go
   labels:
-    app: go-homework-2
+    app: go-homework-2-core
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: go-homework-2
+      app: go-homework-2-core
   template:
     metadata:
-      name: go-homework-2
+      name: go-homework-2-core
       labels:
-        app: go-homework-2
+        app: go-homework-2-core
     spec:
       containers:
-        - name: go-homework-2
-          image: ghcr.io/umu-art/go-homework-2:master
+        - name: go-homework-2-go
+          image: ghcr.io/umu-art/go-homework-2-core:master
           imagePullPolicy: Always
 
           readinessProbe:
             httpGet:
               path: /actuator
               port: 8080
-            initialDelaySeconds: 20
-            periodSeconds: 10
+            initialDelaySeconds: 10
+            periodSeconds: 30
             failureThreshold: 3
 
       imagePullSecrets:
