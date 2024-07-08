@@ -134,7 +134,7 @@ var commands = []CommandInfo{
 				return fmt.Errorf("json marshal failed: %w", err)
 			}
 
-			_, err = ExecuteHttp(info, "api/account", "PATCH", data)
+			_, err = ExecuteHttp(info, "api/account", "POST", data)
 			if err != nil {
 				return err
 			}
