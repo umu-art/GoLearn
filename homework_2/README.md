@@ -11,8 +11,8 @@
 <p>Позволяет взаимодействовать с сервером из консоли, выполняя запросы на создание, чтение, удаление, переименование и изменения аккаунтов и их балансов</p>
 <p>Сборки: </p>
 <ul>
-<li>Win: <a href="http://cherry.umu-art.ru/download/client-win.exe">http://cherry.umu-art.ru/download/client-win.exe</a></li>
-<li>Linux / Mac OS: <a href="http://cherry.umu-art.ru/download/client">http://cherry.umu-art.ru/download/client</a></li>
+<li>Win: <a href="http://cherry.umu-art.ru/client-win.exe">http://cherry.umu-art.ru/client-win.exe</a></li>
+<li>Linux / Mac OS: <a href="http://cherry.umu-art.ru/client">http://cherry.umu-art.ru/client</a></li>
 </ul>
 
 <h3>Github</h3>
