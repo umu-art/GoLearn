@@ -23,7 +23,7 @@ spec:
 
           readinessProbe:
             httpGet:
-              path: /actuator
+              path: /api/actuator
               port: 8080
             initialDelaySeconds: 10
             periodSeconds: 30
