@@ -8,21 +8,47 @@ import (
 	"sync"
 )
 
-func New() *Handler {
+func New(secretKey string) *Handler {
 	return &Handler{
-		accounts: make(map[string]*model.Account),
-		guard:    &sync.RWMutex{},
+		accounts:  make(map[string]*model.Account),
+		guard:     &sync.RWMutex{},
+		secretKey: secretKey,
 	}
 }
 
 type Handler struct {
-	accounts map[string]*model.Account
-	guard    *sync.RWMutex
+	accounts  map[string]*model.Account
+	guard     *sync.RWMutex
+	secretKey string
 }
 
 // Actuator проверка живо ли оно
 func (h *Handler) Actuator(c echo.Context) error {
 	return c.String(http.StatusOK, "OK")
+}
+
+// GetAll возвращает список всех аккаунтов (для админки)
+func (h *Handler) GetAll(c echo.Context) error {
+	secretKey := c.QueryParams().Get("secret-key")
+
+	if secretKey != h.secretKey {
+		return c.NoContent(http.StatusForbidden)
+	}
+
+	h.guard.RLock()
+
+	accounts := make([]dto.GetAccountResponse, 0, len(h.accounts))
+
+	for _, account := range h.accounts {
+		accounts = append(accounts, dto.GetAccountResponse{
+			Name:   account.Name,
+			Amount: account.Amount,
+		})
+	}
+
+	h.guard.RUnlock()
+
+	return c.JSON(http.StatusOK, accounts)
 }
 
 // CreateAccount создает новый аккаунт
