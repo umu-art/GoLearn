@@ -22,15 +22,15 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// Routes
-	e.POST("/account/create", accountsHandler.CreateAccount)
-	e.GET("/account", accountsHandler.GetAccount)
-	e.DELETE("/account", accountsHandler.DeleteAccount)
-	e.PATCH("/account", accountsHandler.PatchAccount)
-	e.POST("/account/rename", accountsHandler.ChangeAccount)
+	e.POST("/api/account/create", accountsHandler.CreateAccount)
+	e.GET("/api/account", accountsHandler.GetAccount)
+	e.DELETE("/api/account", accountsHandler.DeleteAccount)
+	e.PATCH("/api/account", accountsHandler.PatchAccount)
+	e.POST("/api/account/rename", accountsHandler.ChangeAccount)
 
-	e.GET("/accounts", accountsHandler.GetAll)
+	e.GET("/api/accounts", accountsHandler.GetAll)
 
-	e.GET("/actuator", accountsHandler.Actuator)
+	e.GET("/api/actuator", accountsHandler.Actuator)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))

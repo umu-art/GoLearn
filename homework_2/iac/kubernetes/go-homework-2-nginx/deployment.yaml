@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-homework-2-nginx
+  namespace: go
+  labels:
+    app: go-homework-2-nginx
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: go-homework-2-nginx
+
+  template:
+    metadata:
+      name: go-homework-2-nginx
+      labels:
+        app: go-homework-2-nginx
+
+    spec:
+      containers:
+        - name: go-homework-2-nginx
+          image: ghcr.io/umu-art/go-homework-2-nginx:master
+          imagePullPolicy: Always
+
+      imagePullSecrets:
+        - name: github-container-registry
+
+      restartPolicy: Always
+      

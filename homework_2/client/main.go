@@ -39,7 +39,7 @@ var commands = []CommandInfo{
 				return fmt.Errorf("json marshal failed: %w", err)
 			}
 
-			_, err = ExecuteHttp(info, "account/create", "POST", data)
+			_, err = ExecuteHttp(info, "api/account/create", "POST", data)
 			if err != nil {
 				return err
 			}
@@ -56,7 +56,7 @@ var commands = []CommandInfo{
 			fmt.Print("Введите имя аккаунта: ")
 			_, _ = fmt.Scan(&name)
 
-			resp, err := ExecuteHttp(info, fmt.Sprintf("account?name=%s", name), "GET", nil)
+			resp, err := ExecuteHttp(info, fmt.Sprintf("api/account?name=%s", name), "GET", nil)
 			if err != nil {
 				return err
 			}
@@ -87,7 +87,7 @@ var commands = []CommandInfo{
 				return fmt.Errorf("json marshal failed: %w", err)
 			}
 
-			_, err = ExecuteHttp(info, "account", "PATCH", data)
+			_, err = ExecuteHttp(info, "api/account", "PATCH", data)
 			if err != nil {
 				return err
 			}
@@ -109,7 +109,7 @@ var commands = []CommandInfo{
 				return fmt.Errorf("json marshal failed: %w", err)
 			}
 
-			_, err = ExecuteHttp(info, "account", "DELETE", data)
+			_, err = ExecuteHttp(info, "api/account", "DELETE", data)
 			if err != nil {
 				return err
 			}
@@ -134,7 +134,7 @@ var commands = []CommandInfo{
 				return fmt.Errorf("json marshal failed: %w", err)
 			}
 
-			_, err = ExecuteHttp(info, "account", "PATCH", data)
+			_, err = ExecuteHttp(info, "api/account", "PATCH", data)
 			if err != nil {
 				return err
 			}
@@ -180,7 +180,7 @@ func ExecuteHttp(info ConnectionInfo, path string, method string, data []byte) (
 }
 
 func main() {
-	hostVal := flag.String("host", "http://cherry.umu-art.ru", "server host")
+	hostVal := flag.String("host", "http://cherry.umu-art.ru", "server api host")
 	portVal := flag.Int("port", 80, "server port")
 	secretKey := flag.String("secret-key", "", "Ключ админа")
 
@@ -193,7 +193,7 @@ func main() {
 
 	if len(*secretKey) > 0 {
 		println("Попытка получить список всех аккаунтов...")
-		resp, err := ExecuteHttp(connectionInfo, fmt.Sprintf("accounts?secret-key=%s", *secretKey), "GET", nil)
+		resp, err := ExecuteHttp(connectionInfo, fmt.Sprintf("api/accounts?secret-key=%s", *secretKey), "GET", nil)
 		if err != nil {
 			println(err.Error())
 		} else {
