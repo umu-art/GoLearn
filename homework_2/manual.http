@@ -1,4 +1,4 @@
-@server = http://cherry.umu-art.ru
+@server = http://cherry.umu-art.ru/api
 
 ###
 POST {{server}}/account/create
