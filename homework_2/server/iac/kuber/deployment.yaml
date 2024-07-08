@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go_homework_2
+  namespace: go
+  labels:
+    app: go_homework_2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go_homework_2
+  template:
+    metadata:
+      name: go_homework_2
+      labels:
+        app: go_homework_2
+    spec:
+      containers:
+        - name: go_homework_2
+          image: ghcr.io/umu-art/go_homework_2:master
+          imagePullPolicy: Always
+
+          readinessProbe:
+            httpGet:
+              path: /actuator
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 3
+
+      imagePullSecrets:
+        - name: github-container-registry
+
+      restartPolicy: Always
+      
