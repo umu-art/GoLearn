@@ -23,6 +23,8 @@ func main() {
 	e.PATCH("/account", accountsHandler.PatchAccount)
 	e.POST("/account/rename", accountsHandler.ChangeAccount)
 
+	e.GET("/actuator", accountsHandler.Actuator)
+
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))
 }
