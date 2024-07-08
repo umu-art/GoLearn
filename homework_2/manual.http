@@ -1,0 +1,45 @@
+@server = http://localhost:8080
+
+###
+POST {{server}}/account/create
+Content-Type: application/json
+
+{
+  "name": "vikazeni",
+  "amount": 1000
+}
+
+###
+GET {{server}}/account?name=vikazeni
+
+###
+DELETE {{server}}/account
+Content-Type: application/json
+
+{
+  "name": "vikazeni"
+}
+
+###
+PATCH {{server}}/account
+Content-Type: application/json
+
+{
+  "name": "vikazeni",
+  "amount": 1001
+}
+
+###
+POST {{server}}/account/rename
+Content-Type: application/json
+
+{
+  "name": "vikazeni",
+  "new-name": "vikazeni2"
+}
+
+###
+GET {{server}}/account?name=vikazeni
+
+###
+GET {{server}}/account?name=vikazeni2
