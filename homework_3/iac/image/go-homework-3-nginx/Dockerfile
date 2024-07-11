@@ -15,4 +15,4 @@ LABEL author="vikazeni"
 COPY --from=build /app/homework_3/README.md /usr/share/nginx/html/index.html
 COPY --from=build /app/client-win.exe /usr/share/nginx/html/client-win.exe
 COPY --from=build /app/client /usr/share/nginx/html/client
-COPY --from=build /app/homework_3/iac/image/go-homework-2-nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/homework_3/iac/image/go-homework-3-nginx/nginx.conf /etc/nginx/conf.d/default.conf
