@@ -119,7 +119,7 @@ var commands = []CommandInfo{
 }
 
 func main() {
-	hostVal := flag.String("host", "localhost", "server api host")
+	hostVal := flag.String("host", "go.grpc.umu-art.ru", "server api host")
 	portVal := flag.Int("port", 5445, "server port")
 	secretKey := flag.String("secret-key", "", "Ключ админа")
 
