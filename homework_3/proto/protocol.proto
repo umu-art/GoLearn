@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "homework_3/proto";
+
+import "google/protobuf/empty.proto";
+
+service AccountService{
+  rpc GetAccount(GetAccountRequest) returns (Account);
+  rpc CreateAccount(CreateAccountRequest) returns (Account);
+  rpc DeleteAccount(DeleteAccountRequest) returns (google.protobuf.Empty);
+  rpc PatchAccount(PatchAccountRequest) returns (Account);
+  rpc RenameAccount(RenameAccountRequest) returns (Account);
+
+  rpc GetAllAccounts(GetAllAccountsRequest) returns (GetAllAccountsResponse);
+}
+
+message Account{
+  string name = 1;
+  int64 amount = 2;
+}
+
+message GetAccountRequest{
+  string name = 1;
+}
+
+message CreateAccountRequest{
+  string name = 1;
+  int64 amount = 2;
+}
+
+message DeleteAccountRequest{
+  string name = 1;
+}
+
+message PatchAccountRequest{
+  string name = 1;
+  int64 amount = 2;
+}
+
+message RenameAccountRequest{
+  string old_name = 1;
+  string new_name = 2;
+}
+
+message GetAllAccountsRequest{
+  string secret_key = 1;
+}
+
+message GetAllAccountsResponse{
+  repeated Account accounts = 1;
+}

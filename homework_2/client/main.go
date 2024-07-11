@@ -180,7 +180,7 @@ func ExecuteHttp(info ConnectionInfo, path string, method string, data []byte) (
 }
 
 func main() {
-	hostVal := flag.String("host", "http://cherry.umu-art.ru", "server api host")
+	hostVal := flag.String("host", "http://go.http.umu-art.ru", "server api host")
 	portVal := flag.Int("port", 80, "server port")
 	secretKey := flag.String("secret-key", "", "Ключ админа")
 
