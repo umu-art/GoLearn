@@ -3,9 +3,18 @@ LABEL author="vikazeni"
 
 WORKDIR /app
 
+RUN apt update
+RUN apt install -y protobuf-compiler
+RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+
 COPY . .
 
 RUN go mod tidy
+
+RUN export PATH=$PATH:$GOPATH/bin; \
+    protoc --go_out=. --go-grpc_out=. ./homework_3/proto/protocol.proto
+
 RUN CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o ./client-win.exe ./homework_3/client
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./client ./homework_3/client
 
