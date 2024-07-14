@@ -20,9 +20,9 @@ func (a *AccountStorage) Init() error {
 
 	typedClient, err := elasticsearch.NewTypedClient(elasticsearch.Config{
 		Addresses: []string{
-			"https://localhost:9200/",
+			"https://go-homework-4-elastic.go.svc.cluster.local:9200/",
 		},
-		APIKey: "U0RmOHNKQUJjZkktWFlCTjQtejU6VEdScl9nUmpUMHlIenA2MERaYnBzQQ",
+		APIKey: "U1VMaHNaQUJscWNENUg4RGUwR1Q6NERKOEJUVjVUalNHYTRFRU9Id2hoZw==",
 		CACert: cert,
 	})
 	if err != nil {
