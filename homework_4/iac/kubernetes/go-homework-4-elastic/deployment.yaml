@@ -22,8 +22,20 @@ spec:
           imagePullPolicy: Always
 
           volumeMounts:
-            - mountPath: /usr/share/elasticsearch/data/indices
+            - mountPath: /usr/share/elasticsearch/data
               name: elastic-storage
+
+            - mountPath: /usr/share/elasticsearch/config/certs
+              name: elastic-certs-storage
+
+          env:
+            - name: ES_JAVA_OPTS
+              value: "-Xms500m -Xmx500m"
+
+          resources:
+            limits:
+              memory: "500Mi"
+              cpu: "200m"
 
       imagePullSecrets:
         - name: github-container-registry
@@ -32,6 +44,10 @@ spec:
         - name: elastic-storage
           persistentVolumeClaim:
             claimName: elastic-pvc
+
+        - name: elastic-certs-storage
+          persistentVolumeClaim:
+            claimName: elastic-certs-pvc
 
       restartPolicy: Always
       

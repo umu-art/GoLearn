@@ -8,7 +8,7 @@ metadata:
 spec:
   storageClassName: manual
   capacity:
-    storage: 8Gi
+    storage: 200Mi
   accessModes:
     - ReadWriteMany
   hostPath:
@@ -25,4 +25,34 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 8Gi
+      storage: 200Mi
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: elastic-certs-pv
+  labels:
+    type: local
+    app: go-homework-4-elastic
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 200Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/data/elastic-certs"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: elastic-certs-pvc
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 200Mi
