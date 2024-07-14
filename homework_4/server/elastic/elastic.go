@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/elastic/go-elasticsearch/v8"
+	"log"
 	"os"
 )
 
@@ -20,7 +21,7 @@ func (a *AccountStorage) Init() error {
 
 	typedClient, err := elasticsearch.NewTypedClient(elasticsearch.Config{
 		Addresses: []string{
-			"https://go-homework-4-elastic.go.svc.cluster.local:9200/",
+			"https://10.244.2.59:9200/",
 		},
 		APIKey: "U1VMaHNaQUJscWNENUg4RGUwR1Q6NERKOEJUVjVUalNHYTRFRU9Id2hoZw==",
 		CACert: cert,
@@ -31,6 +32,7 @@ func (a *AccountStorage) Init() error {
 
 	resp, err := typedClient.Indices.Exists("accounts").Do(context.Background())
 	if err != nil {
+		log.Fatalf("ОЙ %s", err)
 		return ConnectionError
 	}
 
