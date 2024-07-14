@@ -11,7 +11,7 @@ spec:
     server: https://kubernetes.default.svc
   project: go
   source:
-    path: homework_3/iac/kubernetes/go-homework-4-nginx
+    path: homework_4/iac/kubernetes/go-homework-4-nginx
     repoURL: git@github.com:umu-art/GoLearn.git
     targetRevision: master
   syncPolicy:

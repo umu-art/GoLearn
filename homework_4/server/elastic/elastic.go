@@ -1,7 +1,7 @@
 package elastic
 
 import (
-	"GoLearn/homework_3/proto"
+	"GoLearn/homework_4/proto"
 	"context"
 	"encoding/json"
 	"errors"

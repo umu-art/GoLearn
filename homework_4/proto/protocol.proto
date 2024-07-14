@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package proto;
 
-option go_package = "homework_3/proto";
+option go_package = "homework_4/proto";
 
 import "google/protobuf/empty.proto";
 
