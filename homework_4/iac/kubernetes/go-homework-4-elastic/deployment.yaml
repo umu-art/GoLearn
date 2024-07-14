@@ -18,36 +18,28 @@ spec:
     spec:
       containers:
         - name: go-homework-4-elastic
-          image: elasticsearch:8.14.3
+          image: ghcr.io/umu-art/go-homework-4-elastic:master
           imagePullPolicy: Always
+          command: ["/bin/tini", "--", "/usr/local/bin/docker-entrypoint.sh" ]
 
           volumeMounts:
-            - mountPath: /usr/share/elasticsearch/data
+            - mountPath: /usr/share/elasticsearch/data/
               name: elastic-storage
-
-            - mountPath: /usr/share/elasticsearch/config/certs
-              name: elastic-certs-storage
 
           env:
             - name: ES_JAVA_OPTS
               value: "-Xms500m -Xmx500m"
 
-          resources:
-            limits:
-              memory: "500Mi"
-              cpu: "200m"
-
       imagePullSecrets:
         - name: github-container-registry
+
+      securityContext:
+        fsGroup: 2000
 
       volumes:
         - name: elastic-storage
           persistentVolumeClaim:
             claimName: elastic-pvc
-
-        - name: elastic-certs-storage
-          persistentVolumeClaim:
-            claimName: elastic-certs-pvc
 
       restartPolicy: Always
       
