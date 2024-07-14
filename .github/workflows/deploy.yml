@@ -98,7 +98,7 @@ jobs:
 
     strategy:
       matrix:
-        app: [ go-homework-4-core, go-homework-4-nginx, go-homework-4-elastic ]
+        app: [ go-homework-4-core, go-homework-4-nginx ]
 
     steps:
       - name: Checkout
