@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-homework-4-elastic
+  namespace: go
+spec:
+  selector:
+    app: go-homework-4-elastic
+  ports:
+    - protocol: TCP
+      port: 9200
+      targetPort: 9200
+  type: ClusterIP
+  

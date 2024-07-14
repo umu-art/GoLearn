@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-homework-4-core
+  namespace: go
+  labels:
+    app: go-homework-4-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-homework-4-core
+  template:
+    metadata:
+      name: go-homework-4-core
+      labels:
+        app: go-homework-4-core
+    spec:
+      containers:
+        - name: go-homework-4-core
+          image: ghcr.io/umu-art/go-homework-4-core:master
+          imagePullPolicy: Always
+
+      imagePullSecrets:
+        - name: github-container-registry
+
+      restartPolicy: Always
+      

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-homework-4-core
+  namespace: go
+spec:
+  selector:
+    app: go-homework-4-core
+  ports:
+    - protocol: TCP
+      port: 5445
+      targetPort: 5445
+  type: ClusterIP
+  

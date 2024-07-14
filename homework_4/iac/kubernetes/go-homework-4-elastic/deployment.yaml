@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-homework-4-elastic
+  namespace: go
+  labels:
+    app: go-homework-4-elastic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-homework-4-elastic
+  template:
+    metadata:
+      name: go-homework-4-elastic
+      labels:
+        app: go-homework-4-elastic
+    spec:
+      containers:
+        - name: go-homework-4-elastic
+          image: elasticsearch:8.14.3
+          imagePullPolicy: Always
+
+          volumeMounts:
+            - mountPath: /usr/share/elasticsearch
+              name: elastic-storage
+
+      imagePullSecrets:
+        - name: github-container-registry
+
+      volumes:
+        - name: elastic-storage
+          persistentVolumeClaim:
+            claimName: elastic-pvc
+
+      restartPolicy: Always
+      

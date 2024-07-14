@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: go-homework-4-kibana
+  namespace: argocd
+  labels:
+    type: app
+spec:
+  destination:
+    namespace: go
+    server: https://kubernetes.default.svc
+  project: go
+  source:
+    path: homework_3/iac/kubernetes/go-homework-4-kibana
+    repoURL: git@github.com:umu-art/GoLearn.git
+    targetRevision: master
+  syncPolicy:
+    automated:
+      prune: true
