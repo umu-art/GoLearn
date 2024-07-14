@@ -22,7 +22,7 @@ spec:
           imagePullPolicy: Always
 
           volumeMounts:
-            - mountPath: /usr/share/elasticsearch
+            - mountPath: /usr/share/elasticsearch/data/indices
               name: elastic-storage
 
       imagePullSecrets:
