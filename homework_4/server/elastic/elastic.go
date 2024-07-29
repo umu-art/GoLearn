@@ -23,7 +23,7 @@ func (a *AccountStorage) Init() error {
 		Addresses: []string{
 			"https://10.244.1.120:9200/",
 		},
-		APIKey: "U1VMaHNaQUJscWNENUg4RGUwR1Q6NERKOEJUVjVUalNHYTRFRU9Id2hoZw==",
+		APIKey: "MzJ2bl81QUJDdTJ2aWhRam0tMXk6al9nZlZnck5SMkN0eUM1S2J0RW9TZw==",
 		CACert: cert,
 	})
 	if err != nil {
