@@ -21,7 +21,7 @@ func (a *AccountStorage) Init() error {
 
 	typedClient, err := elasticsearch.NewTypedClient(elasticsearch.Config{
 		Addresses: []string{
-			"https://10.244.2.59:9200/",
+			"https://10.244.1.120:9200/",
 		},
 		APIKey: "U1VMaHNaQUJscWNENUg4RGUwR1Q6NERKOEJUVjVUalNHYTRFRU9Id2hoZw==",
 		CACert: cert,
